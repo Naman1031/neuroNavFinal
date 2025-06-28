@@ -207,8 +207,8 @@ export default function NeuroNavApp() {
         </div>
         <div className="bg-green-500 ml-auto mr-5 text-white px-4 py-2 rounded-full text-sm font-medium">
           {attentionSpan !== null
-            ? `🎯 Attention Span: ${attentionSpan}%`
-            : "🎯 Focus Mode Ready"}
+            ? `Attention Span: ${attentionSpan}%`
+            : " Focus Mode Ready"}
         </div>
 
         <div className="flex gap-4 relative">
@@ -227,7 +227,7 @@ export default function NeuroNavApp() {
           </button>
 
           {showSettings && (
-            <div className="absolute right-0 mt-2 w-64 z-50 bg-white shadow-xl rounded-xl p-4 border border-gray-200">
+            <div className="absolute right-0 top-8 mt-2 w-64 z-50 bg-white shadow-xl rounded-xl p-4 border border-gray-200">
               <h2 className="text-lg font-semibold mb-4">Accessibility</h2>
               <div className="space-y-4">
                 <ToggleSwitch
