@@ -46,6 +46,7 @@ const Auth = () => {
           fullName: response.data.fullName,
           email: response.data.email,
         });
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
