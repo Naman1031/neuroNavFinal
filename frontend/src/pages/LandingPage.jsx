@@ -13,6 +13,7 @@ import {
   Target,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ModernCarouselStats from "../components/Carousel";
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
@@ -249,28 +250,7 @@ export default function LandingPage() {
           </div>
 
           {/* Stats Section */}
-          <div
-            className={`grid grid-cols-2 md:grid-cols-4 gap-6 mb-24 transition-all duration-1200 delay-400 ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "translate-y-12 opacity-0"
-            }`}
-          >
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-sm hover:bg-white/10 hover:border-white/20 transition-all duration-500 hover:scale-110 hover:-rotate-1">
-                  <div
-                    className={`text-3xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2 group-hover:animate-pulse`}
-                  >
-                    {stat.number}
-                  </div>
-                  <div className="text-gray-300 font-medium group-hover:text-white transition-colors duration-300">
-                    {stat.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ModernCarouselStats isVisible={isVisible}/>
 
           {/* Features Section */}
           <section
