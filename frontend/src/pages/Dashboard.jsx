@@ -69,7 +69,7 @@ export default function NeuroNavApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [textInput, setTextInput] = useState("");
   const [voiceStyle, setVoiceStyle] = useState("friendly");
-  const [clicked, setClicked] = useState(false)
+  const [clicked, setClicked] = useState(false);
   const [activeContentTab, setActiveContentTab] = useState("summary");
   const [quiz, setQuiz] = useState("not");
   const [speed, setSpeed] = useState(1.0);
@@ -176,7 +176,7 @@ export default function NeuroNavApp() {
       alert("Please provide content to process!");
       return;
     }
-    setClicked(true)
+    setClicked(true);
     setIsProcessing(true);
     try {
       const formData = new FormData();
@@ -421,132 +421,138 @@ export default function NeuroNavApp() {
               </div>
             </div>
           )} */}
-          {isProcessing && <div className="w-full max-w-4xl mx-auto">
-            {/* Toggle Buttons */}
-            <div className="flex space-x-2 mb-6">
-              <button
-                onClick={() => setActiveContentTab("summary")}
-                className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
-                  activeContentTab === "summary"
-                    ? "bg-purple-600 text-white shadow-lg transform scale-[1.02]"
-                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                }`}
-              >
-                Summary
-              </button>
-              <button
-                onClick={() => setActiveContentTab("keyPoints")}
-                className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
-                  activeContentTab === "keyPoints"
-                    ? "bg-purple-600 text-white shadow-lg transform scale-[1.02]"
-                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                }`}
-              >
-                Key Points
-              </button>
-            </div>
-
-            {/* Content Container */}
-            <div className="space-y-4">
-              {summarizedParagraphs.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+          {isProcessing && (
+            <div className="w-full max-w-4xl mx-auto">
+              {/* Toggle Buttons */}
+              <div className="flex space-x-2 mb-6">
+                <button
+                  onClick={() => setActiveContentTab("summary")}
+                  className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
+                    activeContentTab === "summary"
+                      ? "bg-purple-600 text-white shadow-lg transform scale-[1.02]"
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  }`}
                 >
-                  {/* Card Header */}
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-gray-100">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {item.title}
-                    </h3>
-                  </div>
+                  Summary
+                </button>
+                <button
+                  onClick={() => setActiveContentTab("keyPoints")}
+                  className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
+                    activeContentTab === "keyPoints"
+                      ? "bg-purple-600 text-white shadow-lg transform scale-[1.02]"
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  }`}
+                >
+                  Key Points
+                </button>
+              </div>
 
-                  {/* Card Content */}
-                  <div className="p-6">
-                    <div className="transition-all duration-500 ease-in-out">
-                      {activeContentTab === "summary" ? (
-                        <div className="space-y-4">
-                          <p className="text-gray-700 leading-relaxed text-base">
-                            {item.summary.paragraph}
-                          </p>
-                          {item.summary.audioFile && (
-                            <div className="flex items-center space-x-3 mt-4">
-                              <button
-                                onClick={() =>
-                                  playAudio(item.summary.audioFile)
-                                }
-                                className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                              >
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                                <span className="font-medium">Play Audio</span>
-                              </button>
-                              <div className="flex items-center space-x-2 text-gray-500">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-sm">Audio available</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="space-y-3">
-                          {item.keyPoints.map((point, index) => (
-                            <div
-                              key={index}
-                              className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 group"
-                            >
-                              <div className="flex-shrink-0 mt-1">
-                                <div className="w-2 h-2 bg-purple-500 rounded-full group-hover:bg-purple-600 transition-colors duration-200"></div>
-                              </div>
-                              <p className="text-gray-700 leading-relaxed text-base group-hover:text-gray-800 transition-colors duration-200">
-                                {point}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+              {/* Content Container */}
+              <div className="space-y-4">
+                {summarizedParagraphs.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+                  >
+                    {/* Card Header */}
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-gray-100">
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {item.title}
+                      </h3>
                     </div>
-                  </div>
 
-                  {/* Card Footer */}
-                  <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <span className="font-medium">
-                        {activeContentTab === "summary"
-                          ? "Summary View"
-                          : `${item.keyPoints.length} Key Points`}
-                      </span>
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                            activeContentTab === "summary"
-                              ? "bg-purple-500"
-                              : "bg-gray-300"
-                          }`}
-                        ></div>
-                        <div
-                          className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                            activeContentTab === "keyPoints"
-                              ? "bg-purple-500"
-                              : "bg-gray-300"
-                          }`}
-                        ></div>
+                    {/* Card Content */}
+                    <div className="p-6">
+                      <div className="transition-all duration-500 ease-in-out">
+                        {activeContentTab === "summary" ? (
+                          <div className="space-y-4">
+                            <p className="text-gray-700 leading-relaxed text-base">
+                              {item.summary.paragraph}
+                            </p>
+                            {item.summary.audioFile && (
+                              <div className="flex items-center space-x-3 mt-4">
+                                <button
+                                  onClick={() =>
+                                    playAudio(item.summary.audioFile)
+                                  }
+                                  className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                >
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                  <span className="font-medium">
+                                    Play Audio
+                                  </span>
+                                </button>
+                                <div className="flex items-center space-x-2 text-gray-500">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                  <span className="text-sm">
+                                    Audio available
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {item.keyPoints.map((point, index) => (
+                              <div
+                                key={index}
+                                className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 group"
+                              >
+                                <div className="flex-shrink-0 mt-1">
+                                  <div className="w-2 h-2 bg-purple-500 rounded-full group-hover:bg-purple-600 transition-colors duration-200"></div>
+                                </div>
+                                <p className="text-gray-700 leading-relaxed text-base group-hover:text-gray-800 transition-colors duration-200">
+                                  {point}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Card Footer */}
+                    <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
+                      <div className="flex items-center justify-between text-sm text-gray-600">
+                        <span className="font-medium">
+                          {activeContentTab === "summary"
+                            ? "Summary View"
+                            : `${item.keyPoints.length} Key Points`}
+                        </span>
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                              activeContentTab === "summary"
+                                ? "bg-purple-500"
+                                : "bg-gray-300"
+                            }`}
+                          ></div>
+                          <div
+                            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                              activeContentTab === "keyPoints"
+                                ? "bg-purple-500"
+                                : "bg-gray-300"
+                            }`}
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>}
-          
+          )}
+
           <PodcastPanel
             cardClasses={cardClasses}
             isDarkMode={isDarkMode}
