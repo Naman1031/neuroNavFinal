@@ -239,12 +239,6 @@ export default function LandingPage() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-600 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out"></div>
               </button>
-
-              <button className="group px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-110 active:scale-95">
-                <span className="group-hover:text-orange-200 transition-colors duration-300">
-                  Watch Demo
-                </span>
-              </button>
             </div>
           </div>
 
