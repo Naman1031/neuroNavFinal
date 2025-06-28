@@ -13,7 +13,7 @@ const router = express.Router();
 // router.get("/prompt", promptController);
 //router.post("/keyConcepts",upload.single("file"),parsePdf,keyConcepts);
 router.post("/summarize",upload.single("file"),parsePdf,Summarize );
-router.post("/podcast",upload.single("file"), parsePdf, generatePodcastDialog);
+router.post("/podcast",upload.single("pdfData"), parsePdf, generatePodcastDialog);
 
 router.post("/quiz", upload.single("file"), parsePdf, quiz);
 
