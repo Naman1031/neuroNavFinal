@@ -587,6 +587,7 @@ export default function NeuroNavApp() {
             setStreak={setStreak}
             attentionSpan={attentionSpan}
             setAttentionSpan={setAttentionSpan}
+            setShowTimetable={setShowTimetable}
           />
         </div>
         <div>
