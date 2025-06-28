@@ -3,7 +3,11 @@ import cors from "cors";
 // import dataRouter from "./routes/data.routes.js";
 import userRouter from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv"
 const app = express();
+
+dotenv.config();
+
 
 app.use(
   cors({
