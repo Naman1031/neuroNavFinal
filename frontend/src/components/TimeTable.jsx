@@ -6,6 +6,14 @@ const Timetable = ({ isOpen, onClose }) => {
   const [timetableData, setTimetableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [completedSessions, setCompletedSessions] = useState({});
+
+  const toggleCompletion = (id) => {
+    setCompletedSessions((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -91,7 +99,7 @@ const Timetable = ({ isOpen, onClose }) => {
     const timetable = [];
     let currentTime = startHour * 60; // Convert to minutes
     const totalSessions = 6; // Generate 8 focus sessions
-    let breakCount = 0;
+    let breakCount = 1;
 
     for (let i = 0; i < totalSessions; i++) {
       // Focus session
@@ -121,7 +129,7 @@ const Timetable = ({ isOpen, onClose }) => {
           startTime: breakStart,
           endTime: breakEnd,
           duration: breakMinutes,
-          title: `Break ${breakCount + 1}`,
+          title: `Break ${breakCount}`,
           description: "Rest and recharge",
         });
         breakCount += 1;
@@ -148,10 +156,10 @@ const Timetable = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 backdrop-blur-md bg-white/10 flex items-center justify-center z-50 transition-all duration-300">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 p-6 text-white">
+        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 p-6 text-white shadow-md backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Calendar className="w-8 h-8" />
@@ -205,68 +213,83 @@ const Timetable = ({ isOpen, onClose }) => {
                 </p>
               </div>
 
-              {timetableData.map((session, index) => (
-                <div
-                  key={session.id}
-                  className={`rounded-xl p-4 border-l-4 transition-all duration-200 hover:shadow-md ${
-                    session.type === "focus"
-                      ? "bg-gradient-to-r from-green-50 to-emerald-50 border-l-green-500"
-                      : "bg-gradient-to-r from-pink-50 to-rose-50 border-l-pink-500"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={`p-3 rounded-full ${
-                          session.type === "focus"
-                            ? "bg-green-100 text-green-600"
-                            : "bg-pink-100 text-pink-600"
-                        }`}
-                      >
-                        {session.type === "focus" ? (
-                          <Play className="w-5 h-5" />
-                        ) : (
-                          <Coffee className="w-5 h-5" />
-                        )}
+              {timetableData.map((session, index) => {
+                const isCompleted = completedSessions[session.id];
+
+                return (
+                  <div
+                    key={session.id}
+                    className={`rounded-xl p-5 border border-gray-200 transition-all duration-300 hover:shadow-xl ${
+                      session.type === "focus"
+                        ? "bg-gradient-to-br from-green-50 to-emerald-100"
+                        : "bg-gradient-to-br from-rose-50 to-pink-100"
+                    } ${isCompleted ? "opacity-60 line-through" : ""}`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div
+                          className={`p-2 rounded-full ${
+                            session.type === "focus"
+                              ? "bg-green-100 text-green-600"
+                              : "bg-pink-100 text-pink-600"
+                          }`}
+                        >
+                          {session.type === "focus" ? (
+                            <Play className="w-4 h-4" />
+                          ) : (
+                            <Coffee className="w-4 h-4" />
+                          )}
+                        </div>
+
+                        {/* Details */}
+                        <div>
+                          <div className="text-sm text-gray-500 flex items-center space-x-2">
+                            <Clock className="w-4 h-4" />
+                            <span>
+                              {session.startTime} – {session.endTime}
+                            </span>
+                            <span
+                              className={`ml-2 px-2 py-0.5 text-xs rounded-full font-medium ${
+                                session.type === "focus"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-pink-100 text-pink-700"
+                              }`}
+                            >
+                              {session.duration} min
+                            </span>
+                          </div>
+                          <h4 className="font-semibold text-gray-800 mt-1">
+                            {session.title}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            {session.description}
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-500" />
-                          <span className="font-bold text-gray-800">
-                            {session.startTime} – {session.endTime}
-                          </span>
+                      {/* Checkbox to mark complete */}
+                      <div className="flex items-center">
+                        <label className="flex items-center space-x-2 text-sm cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isCompleted}
+                            onChange={() => toggleCompletion(session.id)}
+                            className="w-5 h-5 text-purple-600 border-gray-300 rounded transition duration-150 ease-in-out shadow-sm focus:ring-purple-500"
+                          />
                           <span
-                            className={`px-2 py-1 text-xs rounded-full font-medium ${
-                              session.type === "focus"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-pink-100 text-pink-700"
+                            className={`text-sm font-medium transition ${
+                              isCompleted ? "text-gray-400" : "text-gray-800"
                             }`}
                           >
-                            {session.duration} min
+                            {isCompleted ? "Done" : "Mark"}
                           </span>
-                        </div>
-                        <h4 className="font-semibold text-gray-800 mt-1">
-                          {session.title}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {session.description}
-                        </p>
+                        </label>
                       </div>
                     </div>
-
-                    {session.type === "focus" && (
-                      <button
-                        onClick={() => handleEnterFocusMode(session)}
-                        className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
-                      >
-                        <Play className="w-4 h-4" />
-                        <span className="font-medium">Start Focus</span>
-                      </button>
-                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {/* Footer tip */}
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 mt-6">

@@ -69,6 +69,7 @@ export default function NeuroNavApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [textInput, setTextInput] = useState("");
   const [voiceStyle, setVoiceStyle] = useState("friendly");
+  const [clicked, setClicked] = useState(false)
   const [activeContentTab, setActiveContentTab] = useState("summary");
   const [quiz, setQuiz] = useState("not");
   const [speed, setSpeed] = useState(1.0);
@@ -175,7 +176,7 @@ export default function NeuroNavApp() {
       alert("Please provide content to process!");
       return;
     }
-
+    setClicked(true)
     setIsProcessing(true);
     try {
       const formData = new FormData();
@@ -420,7 +421,7 @@ export default function NeuroNavApp() {
               </div>
             </div>
           )} */}
-          <div className="w-full max-w-4xl mx-auto">
+          {isProcessing && <div className="w-full max-w-4xl mx-auto">
             {/* Toggle Buttons */}
             <div className="flex space-x-2 mb-6">
               <button
@@ -544,7 +545,7 @@ export default function NeuroNavApp() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
           {/* Voice Assistant */}
           <div
             className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
