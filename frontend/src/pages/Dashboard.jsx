@@ -212,13 +212,13 @@ export default function NeuroNavApp() {
         </div>
 
         <div className="flex gap-4 relative">
-          <button
+          {/* <button
             onClick={() => setShowTimetable(true)}
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
             <span>My Timetable</span>
-          </button>
+          </button> */}
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"

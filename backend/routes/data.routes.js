@@ -8,13 +8,8 @@ import { Summarize} from "../controllers/summarized.controller.js";
 
 const router = express.Router();
 
-// router.get("/prompt", promptController);
-
-// router.get("/prompt", promptController);
-//router.post("/keyConcepts",upload.single("file"),parsePdf,keyConcepts);
 router.post("/summarize",upload.single("file"),parsePdf,Summarize );
 router.post("/podcast",upload.single("file"), parsePdf, generatePodcastDialog);
-
 router.post("/quiz", upload.single("file"), parsePdf, quiz);
 
 export default router;

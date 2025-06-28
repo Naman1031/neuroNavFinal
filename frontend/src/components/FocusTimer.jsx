@@ -1,7 +1,7 @@
 // src/components/FocusTimer.jsx
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Timer, Play, Square, RotateCcw, Flame } from "lucide-react";
+import { Timer, Play, Square, RotateCcw, Flame,Calendar } from "lucide-react";
 import FaceDetectionMini from "../pages/FaceDetectionMini.jsx";
 
 const getMinutesFromAnswer = (answer) => {
@@ -26,6 +26,7 @@ const FocusTimer = ({
   streak,
   attentionSpan,
   setAttentionSpan,
+  setShowTimetable
 }) => {
   const [hardCodedTime, setHardCodedTime] = useState(1);
   const [timerMinutes, setTimerMinutes] = useState(0);
@@ -196,6 +197,16 @@ const FocusTimer = ({
           <Flame className="w-4 h-4 text-orange-500" />
           <span className="font-medium">Streak:</span>
           <span className="font-bold">{streak} days</span>
+        </div>
+
+        <div>
+          <button
+            onClick={() => setShowTimetable(true)}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center space-x-2"
+          >
+            <Calendar className="w-4 h-4" />
+            <span>My Timetable</span>
+          </button>
         </div>
       </div>
 
