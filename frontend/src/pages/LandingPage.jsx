@@ -168,7 +168,7 @@ export default function LandingPage() {
               <Brain className="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-              FocusFlow
+              NeuroNav
             </span>
           </div>
           <div className="hidden md:flex space-x-8">
@@ -390,7 +390,7 @@ export default function LandingPage() {
               <Brain className="w-5 h-5 text-white" />
             </div>
             <span className="text-lg font-semibold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-              FocusFlow
+              NeuroNav
             </span>
           </div>
           <p className="text-gray-400">

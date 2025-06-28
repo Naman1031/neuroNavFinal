@@ -21,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+app.use("/output", express.static("output"));
+
 app.use("/api/data", dataRouter);
 
 //user routes

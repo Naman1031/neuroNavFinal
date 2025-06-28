@@ -23,6 +23,10 @@ import {
 import FocusTimer from "../components/FocusTimer.jsx";
 import Timetable from "../components/TimeTable.jsx";
 import axios from "axios";
+import PodcastPanel from "../components/PodcastPanel.jsx";
+
+
+//podcast
 import QuizBot from "../components/QuizBot.jsx";
 
 // toggle for navbar
@@ -78,6 +82,38 @@ export default function NeuroNavApp() {
   const speechSynthesis = window.speechSynthesis;
   const fileInputRef = useRef();
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  const [podcastAudioUrl, setPodcastAudioUrl] = useState("");
+  const [podcastScript, setPodcastScript] = useState([]);
+
+  const handleGeneratePodcast = async () => {
+    try {
+      const formData = new FormData();
+      console.log(formData)
+
+      if (uploadedFile) {
+        formData.append("pdfData", uploadedFile);
+      }
+
+      formData.append("prompt", textInput || "");
+
+      const response = await axios.post(
+        "http://localhost:5000/api/data/podcast",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const data = response.data;
+      setPodcastAudioUrl(`http://localhost:5000/${data.audioPath}`);
+      setPodcastScript(data.script);
+    } catch (err) {
+      console.error("Podcast error", err);
+      alert("Failed to generate podcast.");
+    }
+  };
 
   const themeClasses = isDarkMode
     ? "bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-black"
@@ -167,6 +203,7 @@ export default function NeuroNavApp() {
       }));
 
       setSummarizedParagraphs(formattedParagraphs);
+      await handleGeneratePodcast();
     } catch (error) {
       console.error("API Error:", error);
       alert("Summarization failed. Please try again.");
@@ -576,6 +613,16 @@ export default function NeuroNavApp() {
                 : "📄 Add some content above to enable voice reading."}
             </div>
           </div>
+          <PodcastPanel
+            cardClasses={cardClasses}
+            isDarkMode={isDarkMode}
+            speed={speed}
+            volume={volume}
+            setSpeed={setSpeed}
+            setVolume={setVolume}
+            podcastAudioUrl={podcastAudioUrl}
+            scriptLines={podcastScript}
+          />
 
           <div
             className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
