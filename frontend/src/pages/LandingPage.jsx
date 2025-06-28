@@ -12,11 +12,13 @@ import {
   Heart,
   Target,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -227,7 +229,10 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25 hover:scale-110 active:scale-95 overflow-hidden">
+              <button
+                onClick={() => navigate("/auth")}
+                className="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25 hover:scale-110 active:scale-95 overflow-hidden"
+              >
                 <span className="flex items-center space-x-2 relative z-10">
                   <span>Get Started Free</span>
                   <ArrowRight className="w-5 h-5 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" />
