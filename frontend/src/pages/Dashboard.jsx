@@ -23,6 +23,7 @@ import {
 import FocusTimer from "../components/FocusTimer.jsx";
 import Timetable from "../components/TimeTable.jsx";
 import axios from "axios";
+import QuizBot from "../components/QuizBot.jsx";
 
 // toggle for navbar
 function ToggleSwitch({
@@ -574,6 +575,12 @@ export default function NeuroNavApp() {
                 ? "🎵 Content ready for text-to-speech! Use the play buttons above."
                 : "📄 Add some content above to enable voice reading."}
             </div>
+          </div>
+
+          <div
+            className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
+          >
+            <QuizBot/>
           </div>
         </div>
 

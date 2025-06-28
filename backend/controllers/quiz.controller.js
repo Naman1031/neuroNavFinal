@@ -10,7 +10,6 @@ export const quiz = async (req, res) => {
       .status(400)
       .json({ error: "Either prompt or PDF data is required." });
   }
-
   try {
     res.status(200).json({prompt,pdfData});
   } catch (error) {
