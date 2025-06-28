@@ -25,7 +25,6 @@ import Timetable from "../components/TimeTable.jsx";
 import axios from "axios";
 import PodcastPanel from "../components/PodcastPanel.jsx";
 
-
 //podcast
 import QuizBot from "../components/QuizBot.jsx";
 
@@ -70,7 +69,9 @@ export default function NeuroNavApp() {
   const [showSettings, setShowSettings] = useState(false);
   const [textInput, setTextInput] = useState("");
   const [voiceStyle, setVoiceStyle] = useState("friendly");
+  const [clicked, setClicked] = useState(false)
   const [activeContentTab, setActiveContentTab] = useState("summary");
+  const [quiz, setQuiz] = useState("not");
   const [speed, setSpeed] = useState(1.0);
   const [volume, setVolume] = useState(80);
   const [streak, setStreak] = useState(0);
@@ -88,7 +89,7 @@ export default function NeuroNavApp() {
   const handleGeneratePodcast = async () => {
     try {
       const formData = new FormData();
-      console.log(formData)
+      console.log(formData);
 
       if (uploadedFile) {
         formData.append("pdfData", uploadedFile);
@@ -175,7 +176,7 @@ export default function NeuroNavApp() {
       alert("Please provide content to process!");
       return;
     }
-
+    setClicked(true)
     setIsProcessing(true);
     try {
       const formData = new FormData();
@@ -187,7 +188,13 @@ export default function NeuroNavApp() {
         formData,
         { withCredentials: true }
       );
-      console.log(response);
+      const response1 = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/data/prompt`,
+        formData,
+        { withCredentials: true }
+      );
+      setQuiz(response1.data);
+      console.log(response1.data);
 
       const data = response.data;
 
@@ -414,7 +421,7 @@ export default function NeuroNavApp() {
               </div>
             </div>
           )} */}
-          <div className="w-full max-w-4xl mx-auto">
+          {isProcessing && <div className="w-full max-w-4xl mx-auto">
             {/* Toggle Buttons */}
             <div className="flex space-x-2 mb-6">
               <button
@@ -538,7 +545,7 @@ export default function NeuroNavApp() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
           {/* Voice Assistant */}
           <div
             className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
@@ -624,11 +631,13 @@ export default function NeuroNavApp() {
             scriptLines={podcastScript}
           />
 
-          <div
-            className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
-          >
-            <QuizBot />
-          </div>
+          {quiz !== "not" && (
+            <div
+              className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
+            >
+              <QuizBot quiz={quiz} />
+            </div>
+          )}
         </div>
 
         {/* Right Sidebar */}
