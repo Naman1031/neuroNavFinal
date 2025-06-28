@@ -4,10 +4,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const REACT_APP_GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
 const ai = new GoogleGenerativeAI(REACT_APP_GEMINI_API_KEY);
 
-const QuizBot = () => {
-  const [studyNotes, setStudyNotes] = useState(
-    "Photosynthesis is the process by which plants convert sunlight, water, and carbon dioxide into oxygen and glucose."
-  );
+const QuizBot = ({ quiz }) => {
+  const pdf = quiz.pdfData || "";
+  const prompt = quiz.prompt || "";
+  const studyNotes = pdf + prompt;
   const [chatHistory, setChatHistory] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [isWaitingForAnswer, setIsWaitingForAnswer] = useState(false);
@@ -176,13 +176,13 @@ Instructions:
 
   return (
     <div className="h-[500px] flex flex-col">
-      <textarea
+      {/* <textarea
         rows={3}
         className="w-full resize-none p-3 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition mb-2 text-gray-700"
         placeholder="Paste your study notes here..."
         value={studyNotes}
-        onChange={(e) => setStudyNotes(e.target.value)}
-      />
+        // onChange={(e) => setStudyNotes(e.target.value)}
+      /> */}
 
       {transcript && (
         <p className="text-sm text-gray-600 mb-1 px-1">
