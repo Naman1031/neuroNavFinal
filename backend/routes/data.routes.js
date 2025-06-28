@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.post("/summarize",upload.single("file"),parsePdf,Summarize );
 router.post("/podcast",upload.single("file"), parsePdf, generatePodcastDialog);
-router.post("/quiz", upload.single("file"), parsePdf, quiz);
+router.post("/prompt", upload.single("file"), parsePdf, quiz);
 
 export default router;
