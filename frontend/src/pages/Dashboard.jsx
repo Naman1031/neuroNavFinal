@@ -23,6 +23,7 @@ import {
 import FocusTimer from "../components/FocusTimer.jsx";
 import Timetable from "../components/TimeTable.jsx";
 import axios from "axios";
+import QuizBot from "../components/QuizBot.jsx";
 
 // toggle for navbar
 function ToggleSwitch({
@@ -207,18 +208,18 @@ export default function NeuroNavApp() {
         </div>
         <div className="bg-green-500 ml-auto mr-5 text-white px-4 py-2 rounded-full text-sm font-medium">
           {attentionSpan !== null
-            ? `Attention Span: ${attentionSpan}%`
+            ? ` Attention Span: ${attentionSpan}%`
             : " Focus Mode Ready"}
         </div>
 
         <div className="flex gap-4 relative">
-          <button
+          {/* <button
             onClick={() => setShowTimetable(true)}
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
             <span>My Timetable</span>
-          </button>
+          </button> */}
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -575,6 +576,12 @@ export default function NeuroNavApp() {
                 : "📄 Add some content above to enable voice reading."}
             </div>
           </div>
+
+          <div
+            className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
+          >
+            <QuizBot />
+          </div>
         </div>
 
         {/* Right Sidebar */}
@@ -587,6 +594,7 @@ export default function NeuroNavApp() {
             setStreak={setStreak}
             attentionSpan={attentionSpan}
             setAttentionSpan={setAttentionSpan}
+            setShowTimetable={setShowTimetable}
           />
         </div>
         <div>
