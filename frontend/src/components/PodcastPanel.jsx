@@ -52,7 +52,12 @@ const PodcastPanel = ({
               }
             }}
           >
-            <source src={podcastAudioUrl} type="audio/mp3" />
+            <source
+              src={`${podcastAudioUrl}${
+                podcastAudioUrl.includes("?") ? "&" : "?"
+              }t=${Date.now()}`}
+              type="audio/mpeg"
+            />
             Your browser does not support the audio element.
           </audio>
         </div>
@@ -63,9 +68,7 @@ const PodcastPanel = ({
           {scriptLines.map((line, idx) => (
             <p key={idx} className="mb-3 leading-relaxed">
               <strong
-                className={
-                  isDarkMode ? "text-purple-300" : "text-purple-800"
-                }
+                className={isDarkMode ? "text-purple-300" : "text-purple-800"}
               >
                 {line.speaker}:
               </strong>{" "}
