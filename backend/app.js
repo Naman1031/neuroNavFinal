@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-// import dataRouter from "./routes/data.routes.js";
+import dataRouter from "./routes/data.routes.js";
 import userRouter from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv"
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-// app.use("/api/data", dataRouter);
+app.use("/api/data", dataRouter);
 
 //user routes
 app.use("/api/users", userRouter);
