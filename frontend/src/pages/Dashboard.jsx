@@ -27,6 +27,7 @@ import PodcastPanel from "../components/PodcastPanel.jsx";
 
 
 //podcast
+import QuizBot from "../components/QuizBot.jsx";
 
 // toggle for navbar
 function ToggleSwitch({
@@ -244,18 +245,18 @@ export default function NeuroNavApp() {
         </div>
         <div className="bg-green-500 ml-auto mr-5 text-white px-4 py-2 rounded-full text-sm font-medium">
           {attentionSpan !== null
-            ? `🎯 Attention Span: ${attentionSpan}%`
-            : "🎯 Focus Mode Ready"}
+            ? ` Attention Span: ${attentionSpan}%`
+            : " Focus Mode Ready"}
         </div>
 
         <div className="flex gap-4 relative">
-          <button
+          {/* <button
             onClick={() => setShowTimetable(true)}
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
             <span>My Timetable</span>
-          </button>
+          </button> */}
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -264,7 +265,7 @@ export default function NeuroNavApp() {
           </button>
 
           {showSettings && (
-            <div className="absolute right-0 mt-2 w-64 z-50 bg-white shadow-xl rounded-xl p-4 border border-gray-200">
+            <div className="absolute right-0 top-8 mt-2 w-64 z-50 bg-white shadow-xl rounded-xl p-4 border border-gray-200">
               <h2 className="text-lg font-semibold mb-4">Accessibility</h2>
               <div className="space-y-4">
                 <ToggleSwitch
@@ -622,6 +623,12 @@ export default function NeuroNavApp() {
             podcastAudioUrl={podcastAudioUrl}
             scriptLines={podcastScript}
           />
+
+          <div
+            className={`${cardClasses} backdrop-blur-sm rounded-2xl p-6 border shadow-xl`}
+          >
+            <QuizBot />
+          </div>
         </div>
 
         {/* Right Sidebar */}
@@ -634,6 +641,7 @@ export default function NeuroNavApp() {
             setStreak={setStreak}
             attentionSpan={attentionSpan}
             setAttentionSpan={setAttentionSpan}
+            setShowTimetable={setShowTimetable}
           />
         </div>
         <div>
