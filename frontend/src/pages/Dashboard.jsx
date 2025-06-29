@@ -157,6 +157,7 @@ export default function NeuroNavApp() {
   const [podcastAudioUrl, setPodcastAudioUrl] = useState("");
   const [podcastScript, setPodcastScript] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [show, setShow] = useState(false);
 
   const speechSynthesis = window.speechSynthesis;
   const fileInputRef = useRef();
@@ -256,7 +257,7 @@ export default function NeuroNavApp() {
       alert("Please provide content to process!");
       return;
     }
-
+    setShow(true);
     setClicked(true);
     setIsProcessing(true);
 
@@ -1010,20 +1011,6 @@ export default function NeuroNavApp() {
             )}
           </AnimatePresence>
 
-          {/* Enhanced Podcast Panel */}
-          <motion.div variants={itemVariants}>
-            <PodcastPanel
-              cardClasses={cardClasses}
-              isDarkMode={isDarkMode}
-              speed={speed}
-              volume={volume}
-              setSpeed={setSpeed}
-              setVolume={setVolume}
-              podcastAudioUrl={podcastAudioUrl}
-              scriptLines={podcastScript}
-            />
-          </motion.div>
-
           {/* Enhanced Quiz Section */}
           <AnimatePresence>
             {quiz !== "not" && (
@@ -1038,6 +1025,22 @@ export default function NeuroNavApp() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Enhanced Podcast Panel */}
+          {show && !isProcessing && (
+            <motion.div variants={itemVariants}>
+              <PodcastPanel
+                cardClasses={cardClasses}
+                isDarkMode={isDarkMode}
+                speed={speed}
+                volume={volume}
+                setSpeed={setSpeed}
+                setVolume={setVolume}
+                podcastAudioUrl={podcastAudioUrl}
+                scriptLines={podcastScript}
+              />
+            </motion.div>
+          )}
         </div>
 
         {/* Enhanced Right Sidebar */}
