@@ -2,22 +2,54 @@ import React, { useState, useEffect } from "react";
 import { Clock, X, Play, Coffee, Calendar } from "lucide-react";
 import axios from "axios";
 
-const Timetable = ({ isOpen, onClose }) => {
+const Timetable = ({ isOpen, onClose, setCompletedTasks }) => {
   const [timetableData, setTimetableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [completedSessions, setCompletedSessions] = useState({});
+  const [lastCompletedId, setLastCompletedId] = useState(null);
 
-  const toggleCompletion = (id) => {
-    setCompletedSessions((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  // Save on close
+  const handleClose = () => {
+    localStorage.setItem(
+      "completedSessions",
+      JSON.stringify(completedSessions)
+    );
+    if (lastCompletedId) {
+      localStorage.setItem("lastCompletedTask", lastCompletedId);
+    }
+    onClose();
   };
 
+  const toggleCompletion = (id) => {
+    setCompletedSessions((prev) => {
+      const newState = { ...prev, [id]: !prev[id] };
+
+      // ✅ Update focus session count
+      const completedFocusCount = Object.entries(newState).filter(
+        ([key, value]) => key.includes("focus") && value
+      ).length;
+
+      setCompletedTasks(completedFocusCount);
+
+      if (newState[id]) {
+        setLastCompletedId(id);
+      }
+
+      return newState;
+    });
+  };
+
+  // Load saved data on open
   useEffect(() => {
     if (isOpen) {
       fetchAndGenerateTimetable();
+
+      const savedLast = localStorage.getItem("lastCompletedTask");
+      if (savedLast) setLastCompletedId(savedLast);
+
+      const savedSessions = localStorage.getItem("completedSessions");
+      if (savedSessions) setCompletedSessions(JSON.parse(savedSessions));
     }
   }, [isOpen]);
 
@@ -28,9 +60,7 @@ const Timetable = ({ isOpen, onClose }) => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/api/users/getSurvey`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       const surveyData = res.data?.surveyData || [];
       const generatedTimetable = generateTimetable(surveyData);
@@ -46,21 +76,18 @@ const Timetable = ({ isOpen, onClose }) => {
   };
 
   const generateTimetable = (surveyData) => {
-    // Extract survey responses
     const responses = {};
     surveyData.forEach((item) => {
       responses[item.question] = item.answer;
     });
 
-    // Determine productive time and start hour
     const productiveTime =
       responses["What time of day are you most productive?"] || "Morning";
-    let startHour = 9; // Default morning
+    let startHour = 9;
     if (productiveTime.toLowerCase().includes("afternoon")) startHour = 14;
     if (productiveTime.toLowerCase().includes("evening")) startHour = 18;
     if (productiveTime.toLowerCase().includes("night")) startHour = 22;
 
-    // Extract focus duration and break preferences
     const focusDuration =
       responses["How long can you stay focused on a single task?"] ||
       "20-30 mins";
@@ -68,41 +95,37 @@ const Timetable = ({ isOpen, onClose }) => {
     const breakDuration = responses["How long are your breaks?"] || "5-10 mins";
     const condition = responses["Do you have ADHD or Dyslexia?"] || "ADHD";
 
-    // Parse durations
-    let focusMinutes = 25; // Default
+    let focusMinutes = 25;
     if (focusDuration.includes("15-20")) focusMinutes = 17;
     if (focusDuration.includes("20-30")) focusMinutes = 25;
     if (focusDuration.includes("30-45")) focusMinutes = 35;
     if (focusDuration.includes(">45")) focusMinutes = 50;
 
-    let breakMinutes = 8; // Default
-    if (breakDuration.includes("5-10")) breakMinutes = 7;
+    let breakMinutes = 10;
+    if (breakDuration.includes("5-10")) breakMinutes = 5;
     if (breakDuration.includes("10-20")) breakMinutes = 15;
     if (breakDuration.includes(">20")) breakMinutes = 20;
 
-    let numberOfBreaks = 2; //Default
+    let numberOfBreaks = 2;
     if (breakFrequency.includes("1-2")) numberOfBreaks = 2;
     if (breakFrequency.includes("3-5")) numberOfBreaks = 4;
     if (breakFrequency.includes(">5")) numberOfBreaks = 6;
 
-    // Adjust for ADHD/Dyslexia
     if (condition.includes("ADHD")) {
-      focusMinutes = Math.max(15, focusMinutes - 5); // Shorter focus sessions
-      breakMinutes += 2; // Slightly longer breaks
+      focusMinutes = Math.max(15, focusMinutes - 5);
+      breakMinutes += 5;
     }
     if (condition.includes("Dyslexia")) {
-      focusMinutes = Math.max(20, focusMinutes - 3); // Moderate adjustment
-      breakMinutes += 1;
+      focusMinutes = Math.max(20, focusMinutes - 5);
+      breakMinutes += 5;
     }
 
-    // Generate timetable
     const timetable = [];
-    let currentTime = startHour * 60; // Convert to minutes
-    const totalSessions = 6; // Generate 8 focus sessions
+    let currentTime = startHour * 60;
+    const totalSessions = 6;
     let breakCount = 1;
 
     for (let i = 0; i < totalSessions; i++) {
-      // Focus session
       const focusStart = formatTime(currentTime);
       currentTime += focusMinutes;
       const focusEnd = formatTime(currentTime);
@@ -117,7 +140,6 @@ const Timetable = ({ isOpen, onClose }) => {
         description: "Deep work time - minimize distractions",
       });
 
-      // Break session (except after last focus session)
       if (breakCount <= numberOfBreaks) {
         const breakStart = formatTime(currentTime);
         currentTime += breakMinutes;
@@ -132,6 +154,7 @@ const Timetable = ({ isOpen, onClose }) => {
           title: `Break ${breakCount}`,
           description: "Rest and recharge",
         });
+
         breakCount += 1;
       }
     }
@@ -147,19 +170,13 @@ const Timetable = ({ isOpen, onClose }) => {
       .padStart(2, "0")}`;
   };
 
-  const handleEnterFocusMode = (session) => {
-    // This would trigger the focus mode functionality
-    console.log("Entering focus mode for:", session);
-    // You can integrate this with your existing focus timer
-  };
-
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 backdrop-blur-md bg-white/10 flex items-center justify-center z-50 transition-all duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 p-6 text-white shadow-md backdrop-blur-sm">
+        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 p-6 text-white shadow-md shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Calendar className="w-8 h-8" />
@@ -173,7 +190,7 @@ const Timetable = ({ isOpen, onClose }) => {
               </div>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="p-2 hover:bg-white hover:text-black hover:bg-opacity-20 rounded-full transition-colors"
             >
               <X className="w-6 h-6" />
@@ -182,7 +199,7 @@ const Timetable = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+        <div className="p-6 overflow-y-auto h-full">
           {loading && (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -213,7 +230,7 @@ const Timetable = ({ isOpen, onClose }) => {
                 </p>
               </div>
 
-              {timetableData.map((session, index) => {
+              {timetableData.map((session) => {
                 const isCompleted = completedSessions[session.id];
 
                 return (
@@ -223,11 +240,14 @@ const Timetable = ({ isOpen, onClose }) => {
                       session.type === "focus"
                         ? "bg-gradient-to-br from-green-50 to-emerald-100"
                         : "bg-gradient-to-br from-rose-50 to-pink-100"
-                    } ${isCompleted ? "opacity-60 line-through" : ""}`}
+                    } ${isCompleted ? "opacity-60 line-through" : ""} ${
+                      lastCompletedId === session.id
+                        ? "ring-2 ring-purple-500"
+                        : ""
+                    }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-4">
-                        {/* Icon */}
                         <div
                           className={`p-2 rounded-full ${
                             session.type === "focus"
@@ -242,7 +262,6 @@ const Timetable = ({ isOpen, onClose }) => {
                           )}
                         </div>
 
-                        {/* Details */}
                         <div>
                           <div className="text-sm text-gray-500 flex items-center space-x-2">
                             <Clock className="w-4 h-4" />
@@ -268,7 +287,6 @@ const Timetable = ({ isOpen, onClose }) => {
                         </div>
                       </div>
 
-                      {/* Checkbox to mark complete */}
                       <div className="flex items-center">
                         <label className="flex items-center space-x-2 text-sm cursor-pointer">
                           <input
@@ -291,7 +309,6 @@ const Timetable = ({ isOpen, onClose }) => {
                 );
               })}
 
-              {/* Footer tip */}
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 mt-6">
                 <h4 className="font-semibold text-purple-800 mb-2">
                   💡 Pro Tips

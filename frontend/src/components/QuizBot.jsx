@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const REACT_APP_GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
 const ai = new GoogleGenerativeAI(REACT_APP_GEMINI_API_KEY);
 
+
 const QuizBot = ({ quiz }) => {
   const pdf = quiz.pdfData || "";
   const prompt = quiz.prompt || "";
@@ -13,6 +14,10 @@ const QuizBot = ({ quiz }) => {
   const [isWaitingForAnswer, setIsWaitingForAnswer] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [end, setEnd] = useState(false);
+  
+  useEffect(()=>{
+    handleQuiz("Start Quiz")
+  },[])
 
   const bottomRef = useRef(null);
 
