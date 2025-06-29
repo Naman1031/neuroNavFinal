@@ -29,7 +29,7 @@ const FocusTimer = ({
   setShowTimetable,
 }) => {
   const [hardCodedTime, setHardCodedTime] = useState(1);
-  const [timerMinutes, setTimerMinutes] = useState(0);
+  const [ timerMinutes, setTimerMinutes] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const goalAchievedRef = useRef(false);
   const faceRef = useRef();
@@ -196,7 +196,7 @@ const FocusTimer = ({
         <div className="relative left-16 mx-auto">
           <button
             onClick={() => setShowTimetable(true)}
-            className="bg-purple-500 text-white shadow-lg transform scale-[1.02] px-4 py-2 rounded-lg hover:bg-purple-800 hover:to-pink-600 transition-all duration-200 flex items-center space-x-2"
+            className="bg-purple-500 text-white shadow-lg transform scale-[1.02] px-4 py-2 rounded-lg hover:bg-purple-800 transition-all duration-200 flex items-center space-x-2 ml-5" 
           >
             <Calendar className="w-4 h-4" />
             <span>Timetable</span>

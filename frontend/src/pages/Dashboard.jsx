@@ -152,14 +152,13 @@ export default function NeuroNavApp() {
   const [summarizedParagraphs, setSummarizedParagraphs] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
+  const [completedTasks, setCompletedTasks] = useState(0);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [expandedCards, setExpandedCards] = useState({});
   const [podcastAudioUrl, setPodcastAudioUrl] = useState("");
   const [podcastScript, setPodcastScript] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [show, setShow] = useState(false);
-
-  const speechSynthesis = window.speechSynthesis;
   const fileInputRef = useRef();
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
@@ -170,6 +169,17 @@ export default function NeuroNavApp() {
       [cardId]: !prev[cardId],
     }));
   };
+
+  useEffect(() => {
+    const storedCompleted = localStorage.getItem("completedFocusTasks");
+    if (storedCompleted) {
+      setCompletedTasks(Number(storedCompleted));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("completedFocusTasks", completedTasks);
+  }, [completedTasks]);
 
   // Animation variants
   const containerVariants = {
@@ -535,7 +545,7 @@ export default function NeuroNavApp() {
             <StatsCard
               icon={<CheckCircle className="w-7 h-7" />}
               title="Tasks Completed"
-              value="12"
+              value={`${completedTasks}`}
               subtitle="This week's achievements"
               gradient="from-purple-500 to-pink-600"
               delay={0.2}
@@ -1065,6 +1075,7 @@ export default function NeuroNavApp() {
             <Timetable
               isOpen={showTimetable}
               onClose={() => setShowTimetable(false)}
+              setCompletedTasks={setCompletedTasks}
             />
           )}
         </AnimatePresence>
