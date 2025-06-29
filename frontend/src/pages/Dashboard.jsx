@@ -159,6 +159,9 @@ export default function NeuroNavApp() {
   const [podcastScript, setPodcastScript] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [show, setShow] = useState(false);
+  const [test, setTest] = useState(false);
+
+  const speechSynthesis = window.speechSynthesis;
   const fileInputRef = useRef();
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
@@ -1022,19 +1025,67 @@ export default function NeuroNavApp() {
           </AnimatePresence>
 
           {/* Enhanced Quiz Section */}
-          <AnimatePresence>
-            {quiz !== "not" && (
-              <motion.div
-                className={`${cardClasses} rounded-3xl p-8 border shadow-2xl`}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -50, scale: 0.9 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              >
-                <QuizBot quiz={quiz} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {test ? (
+            <AnimatePresence>
+              {quiz !== "not" && (
+                <motion.div
+                  className={`${cardClasses} w-full rounded-2xl p-8 border shadow-2xl`}
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -50, scale: 0.9 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
+                  <QuizBot quiz={quiz} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ) : (
+            <motion.div
+              className={`${cardClasses} w-full rounded-2xl p-8 border shadow-2xl`}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -50, scale: 0.9 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <div className="w-full h-full bg-emerald-700  flex items-center justify-center px-8 py-10">
+                <div className="flex flex-row items-center justify-between w-full max-w-6xl bg-white/10 backdrop-blur-lg rounded-3xl p-10 shadow-2xl text-white">
+                  {/* Left Side Text */}
+                  <div className="flex flex-col space-y-4 max-w-xl">
+                    <h1 className="text-5xl font-extrabold tracking-tight leading-tight drop-shadow-md">
+                      Ready to Test Your Knowledge?
+                    </h1>
+                    <p className="text-white/80 text-lg font-medium">
+                      Embark on a quiz adventure that challenges your mind and
+                      sharpens your skills.
+                    </p>
+                  </div>
+
+                  {/* Right Side Button */}
+                  <button
+                    onClick={()=>{setTest(!test)}} // Replace with your actual function
+                    className="group relative inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cyan-400 to-pink-500 rounded-full font-semibold text-lg shadow-lg hover:scale-105 transition-all duration-300"
+                  >
+                    <span className="absolute inset-0 rounded-full bg-white opacity-10 group-hover:opacity-20 transition-opacity"></span>
+                    <svg
+                      className="w-6 h-6 mr-3 animate-pulse"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M14.752 11.168l-5.197-3.027A1 1 0 008 9.027v5.946a1 1 0 001.555.832l5.197-3.027a1 1 0 000-1.71z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Start Quiz
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Enhanced Podcast Panel */}
           {show && !isProcessing && (
