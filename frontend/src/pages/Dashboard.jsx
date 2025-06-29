@@ -63,7 +63,7 @@ function ToggleSwitch({
           {icon}
         </motion.div>
         <div>
-          <div className="font-semibold text-gray-800 dark:text-white">
+          <div className="font-semibold text-black dark:text-white">
             {title}
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -147,7 +147,7 @@ export default function NeuroNavApp() {
   const [quiz, setQuiz] = useState("not");
   const [speed, setSpeed] = useState(1.0);
   const [volume, setVolume] = useState(80);
-  const [streak, setStreak] = useState(7);
+  const [streak, setStreak] = useState(0);
   const [attentionSpan, setAttentionSpan] = useState(85);
   const [summarizedParagraphs, setSummarizedParagraphs] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
